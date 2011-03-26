@@ -11,7 +11,7 @@ exec tclsh "$0" "$0" "$@"
 
 global prog prog_version prog_url prog_ack
 set prog "xml2rfc"
-set prog_version "v1.36pre1-dev"
+set prog_version "v1.36"
 set prog_url "http://xml.resource.org/"
 set prog_ack \
 "This document was produced
@@ -10385,6 +10385,7 @@ proc start_page_txt {} {
 proc end_page_txt {} {
     global footer lineno pageno unpaginated
     global page_width page_head_height page_body_height page_foot_height
+    global guiP
 
     flush_text
 
@@ -10402,6 +10403,9 @@ proc end_page_txt {} {
     }
 
     set text [format "\[Page %d\]" $pageno]
+    if {$guiP == 1} {
+        wm title . $text ; update 
+    }
     incr pageno
     set len [string length $text]
     set len [expr ($page_width - [string length $footer]) - $len]
@@ -12033,7 +12037,7 @@ proc references_html {tag args} {
 proc reference_html {prefix names title series formats date anchor target
                      target2 width annotations} {
     global options
-    global rfcTxtHome rfcHtmlHome idTxtHome
+    global rfcTxtHome rfcHtmlHome idTxtHome idHtmlHome
 
     if {[string compare $target2 ""]} {
         set prefix "<a href=\"$target2\">$prefix</a>"
@@ -12068,7 +12072,8 @@ proc reference_html {prefix names title series formats date anchor target
             }
             if {[regexp -nocase -- "internet-draft&nbsp;(draft-.*)" $serial x n] \
                     == 1} {
-                set target $idTxtHome/$n.txt
+#                set target $idTxtHome/$n.txt
+                set target $idHtmlHome/$n
                 break
             }
         }
@@ -13670,11 +13675,12 @@ set buffer ""
 set indent $page_basic_indent
 set indents {}
 
-global rfcTxtHome rfcHtmlHome idTxtHome
+global rfcTxtHome rfcHtmlHome idTxtHome idHtmlHome
 
 set rfcTxtHome ftp://ftp.isi.edu/in-notes
 set rfcHtmlHome http://tools.ietf.org/html
 set idTxtHome http://www.ietf.org/internet-drafts
+set idHtmlHome http://tools.ietf.org/html
 
 #       }}}2 Some globals
 #       {{{2 Characters entities
