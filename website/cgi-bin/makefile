@@ -1,6 +1,6 @@
 DIR=cgi-bin
 PUB= $$HOME/public_html/$(DIR)
-INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi
+INS= cat.cgi xml2rfc-dev.cgi xml2rfc.cgi xml2rfc-old.cgi xml2rfc-version check-svg.cgi kramdown.cgi kramdown-version.cgi
 WEB=/home/www/tools.ietf.org/tools/xml2rfc/$(DIR)
 DERIVATIVES= 
 
@@ -8,7 +8,7 @@ all: $(DERIVATIVES)
 
 install: all
 	@for i in $(INS); do \
-	    if [ $$i -nt $(WEB)/$$i ];then \
+	    if [ $$i -nt $(WEB)/$$i -o ! -f $(WEB)/$$i ];then \
 	        echo cp $$i $(WEB)/$$i; \
 	        chmod a+x $$i && cp $$i $(WEB)/$$i; \
 	    fi; \
